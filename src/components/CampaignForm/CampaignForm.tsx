@@ -73,7 +73,7 @@ export const CampaignForm = () => {
                         }
                     >
                         <MenuItem value="draft">Draft</MenuItem>
-                        <MenuItem value="sent">Sent</MenuItem>
+                        <MenuItem value="ready">Ready</MenuItem>
                     </Select>
                 </FormControl>
 
