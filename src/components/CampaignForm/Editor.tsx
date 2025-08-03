@@ -1,8 +1,8 @@
 "use client"
 import {RichTextEditor, RichTextEditorRef} from "mui-tiptap";
-import {useRef, useEffect} from "react";
 import EditorMenuControls from "@/components/CampaignForm/EditorMenuControls";
 import useExtensions from "@/hooks/UseExtensionsOptions";
+import {forwardRef} from "react";
 
 interface EditorProps {
     content?: string;
@@ -10,40 +10,33 @@ interface EditorProps {
     placeholder?: string;
 }
 
-export const Editor = ({
+export const Editor = forwardRef<RichTextEditorRef, EditorProps>(({
     content = "",
     onChange,
-    placeholder = "Add your email content here..."
-}: EditorProps) => {
+    placeholder = "Add your email content here...",
+}, ref) => {
     const extensions = useExtensions({
         placeholder,
     });
 
-    const rteRef = useRef<RichTextEditorRef>(null);
-
-    // Update editor content when content prop changes
-    useEffect(() => {
-        if (rteRef.current && rteRef.current.editor) {
-            rteRef.current.editor.commands.setContent(content);
-        }
-    }, [content]);
-
     return (
         <RichTextEditor
-            ref={rteRef}
-            extensions={extensions}
+            ref={ref}
             content={content}
+            editable
+            extensions={extensions}
             onUpdate={({editor}) => {
                 const html = editor.getHTML();
                 onChange?.(html);
             }}
             renderControls={() => <EditorMenuControls/>}
-
             editorProps={{
                 attributes: {
-                    style: 'min-height: 200px;'
+                    style: 'min-height: 300px;'
                 }
             }}
         />
     );
-};
+});
+
+Editor.displayName = "Editor";
